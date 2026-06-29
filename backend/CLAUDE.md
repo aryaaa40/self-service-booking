@@ -292,6 +292,55 @@ Ringkasan fase:
 - **Fase 1** ✅ — Redesign data model (pasien + rujukan + nomor antrian) + seed data 30 hari
 - **Fase 2** ✅ — Endpoint kiosk, update logika booking, event booking.confirmed
 - **Fase 3** ✅ — EXPLAIN ANALYZE 5 query kiosk, k6 load test cache, manual test skenario kiosk
-- **Fase 4** 🔄 — Swagger, README, Frontend (halaman kiosk pasien + halaman admin)
+- **Fase 4** 🔄 — Swagger ✅, README (belum), Frontend 🔄
 
-**Topik aktif**: Fase 4 — mulai 4A (Swagger / OpenAPI)
+**Topik aktif**: Fase 4 — lanjut 4C Frontend (halaman kiosk + halaman admin)
+
+### Fase 4 — Progress Detail
+
+#### 4A Swagger ✅
+- `@nestjs/swagger` terinstall
+- Setup di `backend/src/main.ts` — docs tersedia di `http://localhost:3000/api/docs`
+- Semua controller diberi `@ApiTags`, `@ApiOperation`, `@ApiResponse`
+- Semua DTO diberi `@ApiProperty` / `@ApiPropertyOptional`
+
+#### 4C Frontend 🔄 — Setup selesai, belum ada komponen
+- Stack: React + Vite + TypeScript + Tailwind v4 + React Router + TanStack Query + Axios
+- Folder: `frontend/` sejajar dengan `backend/` di root project
+- Frontend rules ada di `frontend/frontend-rules.md` — wajib diikuti (feature-based folder, custom hooks, container/presentational)
+- Path alias belum dikonfigurasi (TODO: tambah `@/` alias di `vite.config.ts` + `tsconfig`)
+
+**Struktur yang sudah dibuat:**
+```
+frontend/src/
+  app/
+    App.tsx           — root component (Providers + RouterProvider)
+    providers.tsx     — QueryClientProvider
+    router.tsx        — route: / → KioskPage, /admin → AdminPage
+  features/
+    kiosk/pages/KioskPage.tsx     — placeholder
+    admin/pages/AdminPage.tsx     — placeholder
+  shared/
+    lib/apiClient.ts  — axios instance (baseURL: http://localhost:3000)
+    types/api.ts      — ApiResponse<T> generic type
+  index.css           — hanya @import "tailwindcss"
+  main.tsx            — mount App
+```
+
+**Yang belum dibuat (urutan pengerjaan):**
+1. Path alias `@/` di vite.config.ts + tsconfig.app.json
+2. Shared components: `Spinner`, `Badge`, `Button`, `Input`
+3. Feature Kiosk (urutan alur):
+   - `PasienSearch` — input NIK atau No.BPJS, hit `GET /kiosk/cari`
+   - `RujukanInfo` — tampil nama pasien + status rujukan
+   - `JadwalList` — hit `GET /jadwal?spesialisasi=...`, tampil kartu jadwal
+   - `BookingConfirm` — modal konfirmasi, hit `POST /booking`
+   - `NomorAntrian` — tampil nomor antrian setelah booking confirmed
+4. Feature Admin:
+   - `PasienTable` + form tambah pasien baru
+   - `RujukanForm` — input rujukan untuk pasien BPJS
+   - `PerpanjangRujukanModal` — perpanjang rujukan expired
+   - `RekonsiliasiTable` — lihat status rekonsiliasi pembayaran
+
+#### 4B README (belum)
+- Dikerjakan terakhir setelah frontend selesai
